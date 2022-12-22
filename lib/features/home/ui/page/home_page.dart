@@ -15,17 +15,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 1;
-  final _pageController = PageController();
+  final _pageController = PageController(initialPage: 1);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Env Budget App"
-        ),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     "Env Budget App"
+      //   ),
+      //   centerTitle: true,
+      // ),
       body: SizedBox.expand(
         child: PageView(
           controller: _pageController,
