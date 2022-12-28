@@ -16,10 +16,6 @@ class _BudgetsPageState extends State<BudgetsPage> {
       appBar: AppBar(
         title: Text("Budgets"),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        child: FaIcon(FontAwesomeIcons.plus),
-      ),
       body: ListView.builder(
           itemCount: 10,
           itemBuilder: (context,index){
