@@ -21,10 +21,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: ()=>Navigator.push(context, RecordTransactionsPage.route),
-        child: FaIcon(FontAwesomeIcons.plus),
-      ),
       body: SizedBox.expand(
         child: PageView(
           controller: _pageController,
