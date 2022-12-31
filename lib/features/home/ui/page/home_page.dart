@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../budgets/ui/page/budgets_page.dart';
 import '../../../notifications/ui/page/notification_page.dart';
-import '../../../record_trans/ui/page/record_transaction_page.dart';
 import '../../../reports/ui/page/report_page.dart';
 
 class HomePage extends StatefulWidget {

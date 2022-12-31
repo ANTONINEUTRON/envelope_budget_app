@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'features/budgets/data/repositories/budget_repository.dart';
+import 'features/budgets/ui/bloc/budget_bloc.dart';
 import 'features/home/ui/page/home_page.dart';
 
 void main() {
@@ -12,12 +14,26 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(
+          create: (context) => BudgetRepository(),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+              create: (context)=> BudgetBloc()
+          )
+        ],
+        child: MaterialApp(
+          title: 'Envelope Budget App',
+          theme: ThemeData(
+            primarySwatch: Colors.deepPurple,
+          ),
+          home: const HomePage(),
+        ),
       ),
-      home: const HomePage(),
     );
   }
 }
