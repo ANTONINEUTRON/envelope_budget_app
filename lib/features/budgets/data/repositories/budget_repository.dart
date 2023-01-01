@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///Will provide api for performing CRUD on budgets
 class BudgetRepository{
   final _budgetKey = "BUDGET";//will reference a list of budget jsons
-  late SharedPreferences _sharedPref;
 
   Future<List<Budget>> getAllBudgets() async {
     var pref = await SharedPreferences.getInstance();
@@ -32,23 +31,24 @@ class BudgetRepository{
     return await _saveBudgets(budgets);
   }
 
-  List<Budget> _decodeBudgetsFromJsonList(List<String> listOfBudgetJsons) {
+  Future<List<Budget>> _decodeBudgetsFromJsonList(List<String> listOfBudgetJsons) async {
     return listOfBudgetJsons.map((budgetJson){
       return Budget.fromJson(jsonDecode(budgetJson));
     }).toList();
   }
 
-  List<String> _encodeBudgetsToJsonList(List<Budget> listOfBudgets) {
+  Future<List<String>> _encodeBudgetsToJsonList(List<Budget> listOfBudgets) async {
     return listOfBudgets.map((budget){
       return jsonEncode(budget.toJson());
     }).toList();
   }
 
   Future<bool> _saveBudgets(List<Budget> budgets) async {
+    var sharedPref = await SharedPreferences.getInstance();
     //encode each budget as json and add to list
-    var listToSave = _encodeBudgetsToJsonList(budgets);
+    var listToSave = await _encodeBudgetsToJsonList(budgets);
     //save list to sp
-    return await _sharedPref.setStringList(_budgetKey, listToSave);
+    return await sharedPref.setStringList(_budgetKey, listToSave);
   }
 
 }

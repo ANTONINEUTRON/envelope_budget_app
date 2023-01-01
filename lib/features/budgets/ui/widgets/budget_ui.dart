@@ -1,11 +1,14 @@
+import 'package:envelope_budget_app/features/budgets/data/model/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 
 class BudgetUI extends StatelessWidget {
-  const BudgetUI({Key? key, this.onTap}) : super(key: key);
+  const BudgetUI({Key? key, this.onTap, required this.budget}) : super(key: key);
   final Function()? onTap;
+  final Budget budget;
 
   @override
   Widget build(BuildContext context) {
@@ -13,20 +16,20 @@ class BudgetUI extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
       child: Container(
-        padding: EdgeInsets.fromLTRB(16, 5, 15, 3),
+        padding: const EdgeInsets.fromLTRB(16, 5, 15, 3),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            FaIcon(
+            const FaIcon(
                 FontAwesomeIcons.solidEnvelope
             ),
-            Container(padding: EdgeInsets.all(6),),
+            Container(padding: const EdgeInsets.all(6),),
             Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Title in a long a shsowwkdmn slor loremwmwm, wmnwm bulabu",
+                    budget.label,
                     style: GoogleFonts.dmSans(
                         textStyle: Theme.of(context).textTheme.bodyLarge,
                         fontSize: 16
@@ -41,27 +44,27 @@ class BudgetUI extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              "Limit"
+                              "Amount: ${budget.amount}"
                           ),
                           Text(
-                              "Spent"
+                              "Spent: ${_getAmountSpent()}"
                           ),
                           Text(
-                              "Remaining"
+                              "Remaining: ${_getRemsAmount()}"
                           )
                         ],
                       ),
                       Text(
-                        "Dec 20th, 2022",
+                        DateFormat('E, MMM dd y').format(budget.deadline),
                         style: GoogleFonts.acme(),
                       )
                     ],
                   ),
                   Slider(
-                    value: 28,
+                    value: _getAmountSpent(),
                     onChanged: (newValue){},
                     label: "Remaining",
-                    max: 100,
+                    max: budget.amount,
                     min: 0,
                   )
                 ],
@@ -72,4 +75,14 @@ class BudgetUI extends StatelessWidget {
       ),
     );
   }
+
+  double _getAmountSpent() {
+    double amount = 0;
+    budget.expenses.forEach((expense) {
+      amount += expense.amount;
+    });
+    return amount;
+  }
+
+  double _getRemsAmount() => budget.amount - _getAmountSpent();
 }

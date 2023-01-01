@@ -1,11 +1,14 @@
+import 'package:envelope_budget_app/features/budgets/data/model/budget.dart';
 import 'package:envelope_budget_app/features/budgets/ui/widgets/close_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../page/expense_page.dart';
 import 'budget_ui.dart';
 
 class BudgetDetail extends StatefulWidget {
-  const BudgetDetail({Key? key}) : super(key: key);
+  const BudgetDetail({Key? key, required this.budget}) : super(key: key);
+  final Budget budget;
 
   @override
   State<BudgetDetail> createState() => _BudgetDetailState();
@@ -20,9 +23,11 @@ class _BudgetDetailState extends State<BudgetDetail> {
         shrinkWrap: true,
         children: [
           // CloseModal(),
-          BudgetUI(),
+          BudgetUI(budget: widget.budget,),
           ElevatedButton(
-            onPressed: (){},
+            onPressed: (){
+              Navigator.push(context, ExpensePage.route(widget.budget.expenses));
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
