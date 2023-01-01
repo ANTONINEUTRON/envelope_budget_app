@@ -4,19 +4,19 @@ part 'expense.g.dart';
 
 @JsonSerializable()
 class Expense extends Equatable{
-  final DateTime timeAdded;
+  final DateTime id;
   final double amount;
   String label;
 
   Expense({
-    required this.timeAdded,
+    required this.id,
     required this.amount,
     required this.label
   });
 
   @override
   // TODO: implement props
-  List<Object?> get props => [timeAdded];
+  List<Object?> get props => [id];
 
   factory Expense.fromJson(Map<String, dynamic> json) => _$ExpenseFromJson(json);
 

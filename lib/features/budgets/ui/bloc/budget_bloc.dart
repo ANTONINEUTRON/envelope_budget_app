@@ -1,4 +1,5 @@
 import 'package:envelope_budget_app/features/budgets/data/model/budget.dart';
+import 'package:envelope_budget_app/features/budgets/data/model/expense.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/repositories/budget_repository.dart';
@@ -21,6 +22,7 @@ class BudgetBloc extends Cubit<List<Budget>>{
     required DateTime deadline
   })async{
     var budget = Budget(
+        id: DateTime.now(),
         label: label,
         deadline: deadline,
         amount: amount
@@ -32,5 +34,12 @@ class BudgetBloc extends Cubit<List<Budget>>{
 
   Future<List<Budget>> getAllBudgets() async {
     return await budgetRepository.getAllBudgets();
+  }
+
+  void updateBudget(Budget budget)async{
+    var hasSaved = await budgetRepository.updateBudget(budget);
+    if(hasSaved){
+      emit(await getAllBudgets());
+    }
   }
 }

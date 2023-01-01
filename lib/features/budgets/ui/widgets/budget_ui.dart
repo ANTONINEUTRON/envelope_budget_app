@@ -47,10 +47,10 @@ class BudgetUI extends StatelessWidget {
                               "Amount: ${budget.amount}"
                           ),
                           Text(
-                              "Spent: ${_getAmountSpent()}"
+                              "Spent: ${budget.getAmountSpent()}"
                           ),
                           Text(
-                              "Remaining: ${_getRemsAmount()}"
+                              "Remaining: ${budget.getRemsAmount()}"
                           )
                         ],
                       ),
@@ -61,7 +61,7 @@ class BudgetUI extends StatelessWidget {
                     ],
                   ),
                   Slider(
-                    value: _getAmountSpent(),
+                    value: budget.getAmountSpent(),
                     onChanged: (newValue){},
                     label: "Remaining",
                     max: budget.amount,
@@ -75,14 +75,4 @@ class BudgetUI extends StatelessWidget {
       ),
     );
   }
-
-  double _getAmountSpent() {
-    double amount = 0;
-    budget.expenses.forEach((expense) {
-      amount += expense.amount;
-    });
-    return amount;
-  }
-
-  double _getRemsAmount() => budget.amount - _getAmountSpent();
 }

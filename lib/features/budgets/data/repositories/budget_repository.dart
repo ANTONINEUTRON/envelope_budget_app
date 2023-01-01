@@ -31,6 +31,16 @@ class BudgetRepository{
     return await _saveBudgets(budgets);
   }
 
+  Future<bool> updateBudget(Budget budget) async {
+    //get budgets
+    var budgets = await getAllBudgets();
+    //remove budget instance
+    var hasRemoved = budgets.remove(budget);
+    //add Budget instance
+    budgets.add(budget);
+    return await _saveBudgets(budgets);
+  }
+
   Future<List<Budget>> _decodeBudgetsFromJsonList(List<String> listOfBudgetJsons) async {
     return listOfBudgetJsons.map((budgetJson){
       return Budget.fromJson(jsonDecode(budgetJson));

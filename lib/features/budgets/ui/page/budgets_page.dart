@@ -51,14 +51,19 @@ class _BudgetsPageState extends State<BudgetsPage> {
           return ListView.builder(
               itemCount: listOfBudget.length,
               itemBuilder: (context,index){
-                return BudgetUI(
-                  budget: listOfBudget[index],
-                  onTap: (){
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (context)=>BudgetDetail(budget: listOfBudget[index])
-                    );
-                  },
+                return Column(
+                  children: [
+                    BudgetUI(
+                      budget: listOfBudget[index],
+                      onTap: (){
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (context)=>BudgetDetail(budget: listOfBudget[index])
+                        );
+                      },
+                    ),
+                    Divider()
+                  ],
                 );
               }
           );

@@ -5,22 +5,40 @@ part 'budget.g.dart';
 
 @JsonSerializable()
 class Budget extends Equatable{
-  final DateTime timeAdded = DateTime.now();
+  final DateTime id;
   String label;
   final DateTime deadline;
   final double amount;
-  final List<Expense> expenses = [];
+  final List<Expense> expenses;
 
   Budget({
+    required this.id,
     required this.label,
     required this.deadline,
     required this.amount,
+    this.expenses = const []
   });
 
   @override
-  List<Object?> get props => [timeAdded];
+  List<Object?> get props => [id];
+
+
+  @override
+  bool get stringify {
+    return true;
+  }
 
   factory Budget.fromJson(Map<String, dynamic> json) => _$BudgetFromJson(json);
 
   Map<String, dynamic> toJson() => _$BudgetToJson(this);
+
+  double getAmountSpent() {
+    double amount = 0;
+    expenses.forEach((expense) {
+      amount += expense.amount;
+    });
+    return amount;
+  }
+
+  double getRemsAmount() => amount - getAmountSpent();
 }
