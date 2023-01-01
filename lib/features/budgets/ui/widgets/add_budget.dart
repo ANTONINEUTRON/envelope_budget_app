@@ -1,7 +1,9 @@
 import 'package:envelope_budget_app/features/budgets/ui/widgets/close_modal.dart';
+import 'package:envelope_budget_app/utils/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../utils/error_text_widget.dart';
 import '../bloc/budget_bloc.dart';
@@ -14,38 +16,64 @@ class AddBudget extends StatefulWidget {
 }
 
 class _AddBudgetState extends State<AddBudget> {
-  var label = '';
-  var amount = 0.0;
-  DateTime deadline = DateTime.now();
-  var errorMsg = '';
+  var _label = '';
+  var _amount = 0.0;
+  DateTime _deadline = DateTime.now();
+  var _errorMsg = '';
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(10, 3, 10, 5),
+      padding: EdgeInsets.fromLTRB(10, 30, 10,
+          getBottomPaddingForKeyboardToShow(
+              MediaQuery.of(context).viewInsets.bottom)),
       child: ListView(
         shrinkWrap: true,
         children: [
-          ErrorTextWidget(errorMsg: errorMsg),
+          ErrorTextWidget(errorMsg: _errorMsg),
           TextField(
             maxLines: 2,
+            onChanged: (newLabel){
+              setState(()=>_label=newLabel);
+            },
             decoration: InputDecoration(
                 labelText: "LABEL",
                 border: OutlineInputBorder()
             ),
           ),
-          TextField(
-            maxLines: 1,
-            decoration: InputDecoration(
-                labelText: "AMOUNT",
-                hintText: "0.0",
-                border: OutlineInputBorder()
+          Padding(
+            padding: const EdgeInsets.only(top:10.0),
+            child: TextField(
+              maxLines: 1,
+              onChanged: (newAmount){
+                setState(()=>_amount = double.tryParse(newAmount) ?? 0.0);
+              },
+              decoration: InputDecoration(
+                  labelText: "AMOUNT",
+                  hintText: "0.0",
+                  border: OutlineInputBorder()
+              ),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
           ),
           MaterialButton(
-            onPressed: (){},
-            child: Text("SELECT DATE"),
+            onPressed: (){
+              showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2100)
+              ).then((value){
+                setState((){
+                  _deadline = value ?? DateTime.now();
+                });
+              });
+            },
+            child: Text(
+              _deadline.isBefore(DateTime.now())
+                  ? "SELECT DATE"
+                  : DateFormat('E, MMM dd y').format(_deadline)
+            ),
           ),
           ElevatedButton(
             onPressed: (){
@@ -53,9 +81,12 @@ class _AddBudgetState extends State<AddBudget> {
               if(_areInputsValid()){
                 //pass value to bloc for saving
                 context.read<BudgetBloc>()
-                    .saveBudget(label: label, amount: amount, deadline: deadline);
+                    .saveBudget(label: _label, amount: _amount, deadline: _deadline);
                 // and close modal when saved
                 Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("$_label Added Successfully"))
+                );
               }
             },
             child:  Row(
@@ -77,19 +108,19 @@ class _AddBudgetState extends State<AddBudget> {
   }
 
   bool _areInputsValid() {
-    if(amount <= 0){
+    if(_amount <= 0){
       setState(() {
-        errorMsg = "Enter a valid amount";
+        _errorMsg = "Enter a valid amount";
       });
       return false;
-    }else if(label.length < 2){
+    }else if(_label.length < 2){
       setState(() {
-        errorMsg = "Enter a valid label for identifying this budget";
+        _errorMsg = "Enter a valid label for identifying this budget";
       });
       return false;
-    }else if(deadline?.isBefore(DateTime.now()) ?? true){
+    }else if(_deadline.isBefore(DateTime.now()) ?? true){
       setState(() {
-        errorMsg = "Enter a valid deadline date";
+        _errorMsg = "Enter a valid deadline date";
       });
       return false;
     }

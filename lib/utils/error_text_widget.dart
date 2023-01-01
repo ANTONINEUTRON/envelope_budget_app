@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ErrorTextWidget extends StatelessWidget {
   const ErrorTextWidget({
@@ -10,15 +11,25 @@ class ErrorTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.only(bottom:10.0),
       child: errorMsg.isEmpty
           ? Container()
-          : Text(
-        errorMsg,
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: Colors.red.shade700
-        ),
-      ),
+          : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FaIcon(FontAwesomeIcons.warning, color: Colors.red.shade700,),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  errorMsg,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: Colors.red.shade700
+                  ),
+                ),
+              ),
+            ],
+          ),
     );
   }
 }
