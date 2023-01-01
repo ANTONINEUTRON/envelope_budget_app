@@ -6,7 +6,7 @@ part 'expense.g.dart';
 class Expense extends Equatable{
   final DateTime timeAdded;
   final double amount;
-  final String label;
+  String label;
 
   Expense({
     required this.timeAdded,
@@ -16,7 +16,7 @@ class Expense extends Equatable{
 
   @override
   // TODO: implement props
-  List<Object?> get props => [timeAdded, label];
+  List<Object?> get props => [timeAdded];
 
   factory Expense.fromJson(Map<String, dynamic> json) => _$ExpenseFromJson(json);
 
