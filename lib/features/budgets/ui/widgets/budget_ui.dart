@@ -16,61 +16,66 @@ class BudgetUI extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 5, 15, 3),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const FaIcon(
-                FontAwesomeIcons.solidEnvelope
-            ),
-            Container(padding: const EdgeInsets.all(6),),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    budget.label,
-                    style: GoogleFonts.dmSans(
-                        textStyle: Theme.of(context).textTheme.bodyLarge,
-                        fontSize: 16
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const FaIcon(
+                    FontAwesomeIcons.solidEnvelope
+                ),
+                Container(padding: const EdgeInsets.all(6),),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Text(
+                        budget.label,
+                        style: GoogleFonts.dmSans(
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
+                            fontSize: 16
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                              "Amount: ${budget.amount}"
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  "Amount: ${budget.amount}"
+                              ),
+                              Text(
+                                  "Spent: ${budget.getAmountSpent()}"
+                              ),
+                              Text(
+                                  "Remaining: ${budget.getRemsAmount()}"
+                              )
+                            ],
                           ),
                           Text(
-                              "Spent: ${budget.getAmountSpent()}"
-                          ),
-                          Text(
-                              "Remaining: ${budget.getRemsAmount()}"
+                            DateFormat('E, MMM dd y').format(budget.deadline),
+                            style: GoogleFonts.acme(),
                           )
                         ],
                       ),
-                      Text(
-                        DateFormat('E, MMM dd y').format(budget.deadline),
-                        style: GoogleFonts.acme(),
+                      Slider(
+                        value: budget.getAmountSpent(),
+                        onChanged: (newValue){},
+                        label: "Remaining",
+                        max: budget.amount,
+                        min: 0,
                       )
                     ],
                   ),
-                  Slider(
-                    value: budget.getAmountSpent(),
-                    onChanged: (newValue){},
-                    label: "Remaining",
-                    max: budget.amount,
-                    min: 0,
-                  )
-                ],
-              ),
-            )
-          ],
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

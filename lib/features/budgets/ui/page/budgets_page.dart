@@ -61,8 +61,7 @@ class _BudgetsPageState extends State<BudgetsPage> {
                             builder: (context)=>BudgetDetail(budget: listOfBudget[index])
                         );
                       },
-                    ),
-                    Divider()
+                    )
                   ],
                 );
               }
