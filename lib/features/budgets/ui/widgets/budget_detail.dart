@@ -46,7 +46,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
           BudgetUI(budget: widget.budget,),
           ElevatedButton(
             onPressed: (){
-              Navigator.push(context, ExpensePage.route(widget.budget.expenses));
+              Navigator.push(context, ExpensePage.route(budget: widget.budget));
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

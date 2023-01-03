@@ -1,73 +1,80 @@
 import 'package:envelope_budget_app/features/budgets/data/model/expense.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+import 'package:pie_chart/pie_chart.dart';
+import '../../data/model/budget.dart';
+import '../widgets/expense_ui.dart';
 
 class ExpensePage extends StatelessWidget {
-  const ExpensePage({Key? key, required this.expenses}) : super(key: key);
+  const ExpensePage({Key? key, required this.budget}) : super(key: key);
 
-  final List<Expense> expenses;
+  final Budget budget;
 
-  static Route route(expenses) => MaterialPageRoute(builder: (context)=>ExpensePage(expenses: expenses));
+  static Route route({required Budget budget}) =>
+      MaterialPageRoute(builder: (context)=>ExpensePage(budget: budget));
 
   @override
   Widget build(BuildContext context) {
+    var expenses = budget.expenses;
+    var title = budget.label;
+    var amount = budget.amount;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Expenses"),
-      ),
-      body: ListView.builder(
-        itemCount: expenses.length,
-          itemBuilder: (context, index){
-            return Container(
-              padding: EdgeInsets.only(top:1, right: 8, left: 8),
-              child: Card(
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const FaIcon(FontAwesomeIcons.moneyBill1Wave),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.only(left: 5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                  expenses[index].label,
-                                  style: GoogleFonts.dmSans(
-                                      textStyle: Theme.of(context).textTheme.bodyLarge,
-                                      fontSize: 17
-                                  ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Flexible(
-                                      child: Text(
-                                          "${expenses[index].amount}"
-                                      )
-                                  ),
-                                  Flexible(
-                                    child: Text(
-                                        DateFormat('E, MMM dd y').format(expenses[index].id),
-                                        style: GoogleFonts.acme()
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                )
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics()
+        ),
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: true,
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title),
+                Text("${amount}")
+              ],
+            ),
+            expandedHeight: 350,
+            stretch: true,
+            flexibleSpace: FlexibleSpaceBar(
+              stretchModes: [
+                StretchMode.zoomBackground,
+                StretchMode.blurBackground,
+                StretchMode.fadeTitle,
+              ],
+              background: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  PieChart(
+                    dataMap: {for(var expense in expenses) expense.label : expense.amount},
+                    animationDuration: Duration(milliseconds: 500),
+
+                  ),
+                  // DecoratedBox(
+                  //   decoration: BoxDecoration(
+                  //     gradient: LinearGradient(
+                  //       begin: Alignment(0.0, 0.5),
+                  //       end: Alignment.center,
+                  //       colors: <Color>[
+                  //         Color(0x60000000),
+                  //         Color(0x00000000),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+          ),
+
+          SliverList(
+              delegate: SliverChildBuilderDelegate(
+                childCount: expenses.length,
+                (context, index){
+                  return ExpenseUI(expense: expenses[index],);
+                }
               )
-            );
-          }
+          )
+        ],
       ),
     );
   }
