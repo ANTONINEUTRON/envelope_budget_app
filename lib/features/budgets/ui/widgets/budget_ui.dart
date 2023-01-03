@@ -1,4 +1,5 @@
 import 'package:envelope_budget_app/features/budgets/data/model/budget.dart';
+import 'package:envelope_budget_app/utils/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -58,7 +59,7 @@ class BudgetUI extends StatelessWidget {
                             ],
                           ),
                           Text(
-                            DateFormat('E, MMM dd y').format(budget.deadline),
+                            formatDate(budget.deadline),
                             style: GoogleFonts.acme(),
                           )
                         ],
@@ -80,4 +81,5 @@ class BudgetUI extends StatelessWidget {
       ),
     );
   }
+
 }

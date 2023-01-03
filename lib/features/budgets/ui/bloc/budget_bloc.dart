@@ -42,4 +42,8 @@ class BudgetBloc extends Cubit<List<Budget>>{
       emit(await getAllBudgets());
     }
   }
+
+  Future<List<Expense>> getAllExpenses() async{
+    return await budgetRepository.getAllExpenses();
+  }
 }

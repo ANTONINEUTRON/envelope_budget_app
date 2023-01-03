@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:envelope_budget_app/features/budgets/data/model/expense.dart';
+
 import '../model/budget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -59,6 +61,15 @@ class BudgetRepository{
     var listToSave = await _encodeBudgetsToJsonList(budgets);
     //save list to sp
     return await sharedPref.setStringList(_budgetKey, listToSave);
+  }
+
+  Future<List<Expense>> getAllExpenses() async {
+    var listOfBudgets = await getAllBudgets();
+    var listOfExpenses = <Expense>[];
+    for(var b in listOfBudgets){
+      listOfExpenses.addAll(b.expenses);
+    }
+    return listOfExpenses;
   }
 
 }

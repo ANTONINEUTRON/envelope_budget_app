@@ -1,3 +1,4 @@
+import 'package:envelope_budget_app/utils/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -43,7 +44,7 @@ class ExpenseUI extends StatelessWidget {
                                 ),
                                 Flexible(
                                   child: Text(
-                                      DateFormat('E, MMM dd y').format(expense.id),
+                                      formatDate(expense.id),
                                       style: GoogleFonts.acme()
                                   ),
                                 )
