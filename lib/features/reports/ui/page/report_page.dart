@@ -1,9 +1,13 @@
 import 'package:envelope_budget_app/features/budgets/data/model/expense.dart';
 import 'package:envelope_budget_app/features/budgets/ui/bloc/budget_bloc.dart';
+import 'package:envelope_budget_app/features/budgets/ui/widgets/expense_ui.dart';
+import 'package:envelope_budget_app/features/reports/ui/widgets/grid_summary_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../accounts/ui/widgets/side_scrollable_accounts.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({Key? key}) : super(key: key);
@@ -24,9 +28,8 @@ class _ReportPageState extends State<ReportPage> {
         }
         var listOfExpenses = snapshot.data as List<Expense>;
         listOfExpenses.sort((a, b) {
-          return b.label.compareTo(a.label);
+          return a.id.compareTo(b.id);
         },);
-        print("SIZE ${listOfExpenses.length} \n\n $listOfExpenses");
         return Container(
           padding: const EdgeInsets.only(left: 7,right: 7),
           child: CustomScrollView(
@@ -42,10 +45,10 @@ class _ReportPageState extends State<ReportPage> {
                     Text("#2000")
                   ],
                 ),
-                expandedHeight: 600,
+                expandedHeight: 250,
                 stretch: true,
                 flexibleSpace: FlexibleSpaceBar(
-                  stretchModes: [
+                  stretchModes: const [
                     StretchMode.zoomBackground,
                     StretchMode.blurBackground,
                     StretchMode.fadeTitle,
@@ -53,7 +56,13 @@ class _ReportPageState extends State<ReportPage> {
                   background: Stack(
                     fit: StackFit.expand,
                     children: <Widget>[
-                      const DecoratedBox(
+                      // Container(
+                      //   padding: EdgeInsets.only(top: 100,bottom: 20),
+                      //   height: 100,
+                      //     width: 150,
+                      //     child: SideScrollableAccounts()
+                      // ),
+                      DecoratedBox(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment(0.0, 0.5),
@@ -72,14 +81,15 @@ class _ReportPageState extends State<ReportPage> {
 
               SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2
+                    crossAxisCount: 2,
+                    mainAxisExtent: 140
                 ),
                 delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                    return Container(
-                      alignment: Alignment.center,
-                      color: Colors.teal[100 * (index % 9)],
-                      child: Text('grid item $index'),
+                  (BuildContext context, int index) {
+                    return const GridSummaryUI(
+                      label: 'Expense',
+                      fAI: FontAwesomeIcons.moneyBillWave,
+                      amount: '2500000',
                     );
                   },
                   childCount: 4,
@@ -98,15 +108,15 @@ class _ReportPageState extends State<ReportPage> {
                           textStyle: Theme.of(context).textTheme.headline6
                         ),
                       ),
-                      Row(
-                        children: [
-                          Text(
-                              "see all",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                          Icon(Icons.chevron_right)
-                        ],
-                      )
+                      // Row(
+                      //   children: [
+                      //     Text(
+                      //         "see all",
+                      //       style: Theme.of(context).textTheme.bodyMedium,
+                      //     ),
+                      //     Icon(Icons.chevron_right)
+                      //   ],
+                      // )
                     ],
                   ),
                 ),
@@ -114,14 +124,9 @@ class _ReportPageState extends State<ReportPage> {
 
               SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    childCount: 5,
+                    childCount: listOfExpenses.length > 5 ? 5 : listOfExpenses.length,
                     (context, index){
-                      return Card(
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text("$index"),
-                        ),
-                      );
+                      return ExpenseUI(expense: listOfExpenses[index],);
                     }
                   )
               )

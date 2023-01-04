@@ -11,9 +11,10 @@ Budget _$BudgetFromJson(Map<String, dynamic> json) => Budget(
       label: json['label'] as String,
       deadline: DateTime.parse(json['deadline'] as String),
       amount: (json['amount'] as num).toDouble(),
-      expenses: (json['expenses'] as List<dynamic>)
-          .map((e) => Expense.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      expenses: (json['expenses'] as List<dynamic>?)
+              ?.map((e) => Expense.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$BudgetToJson(Budget instance) => <String, dynamic>{

@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../../accounts/ui/pages/account_page.dart';
 import '../../../budgets/ui/page/budgets_page.dart';
 import '../../../notifications/ui/page/notification_page.dart';
 import '../../../reports/ui/page/report_page.dart';
@@ -29,6 +30,7 @@ class _HomePageState extends State<HomePage> {
           children: const <Widget>[
             ReportPage(),
             BudgetsPage(),
+            AccountPage(),
             NotificationPage()
           ],
         ),
@@ -39,22 +41,30 @@ class _HomePageState extends State<HomePage> {
           _pageController.jumpToPage(index);
           setState(()=>index = _currentIndex);
         },
-        items: [
-          BottomNavyBarItem(
-            icon: const Icon(Icons.pie_chart),
-            title: const Text("Reports")
-          ),
-          BottomNavyBarItem(
-              icon: const FaIcon(FontAwesomeIcons.envelope),
-              title: const Text("Budgets")
-          ),
-          BottomNavyBarItem(
-            icon: const Icon(Icons.notifications),
-            title: const Text("Notifications")
-          )
-        ],
+        items: _getNavItems(),
       ),
     );
+  }
+
+  List<BottomNavyBarItem> _getNavItems() {
+    return [
+        BottomNavyBarItem(
+          icon: const Icon(Icons.pie_chart),
+          title: const Text("Reports")
+        ),
+        BottomNavyBarItem(
+            icon: const FaIcon(FontAwesomeIcons.envelope),
+            title: const Text("Budgets")
+        ),
+        BottomNavyBarItem(
+          icon: const FaIcon(FontAwesomeIcons.buildingColumns),
+          title: const Text("Accounts")
+        ),
+        BottomNavyBarItem(
+          icon: const Icon(Icons.notifications),
+          title: const Text("Notifications")
+        )
+      ];
   }
 
   @override
