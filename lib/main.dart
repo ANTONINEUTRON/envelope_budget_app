@@ -1,6 +1,6 @@
+import 'package:envelope_budget_app/features/income/ui/bloc/income_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'features/accounts/ui/bloc/account_bloc.dart';
 import 'features/budgets/data/repositories/budget_repository.dart';
 import 'features/budgets/ui/bloc/budget_bloc.dart';
 import 'features/home/ui/page/home_page.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
               )
           ),
           BlocProvider(
-            create: (context)=> AccountBloc(),
+            create: (context)=> IncomeBloc(),
           )
         ],
         child: MaterialApp(

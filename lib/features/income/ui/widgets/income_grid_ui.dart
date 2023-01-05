@@ -1,13 +1,12 @@
+import 'package:envelope_budget_app/features/income/data/model/income.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../data/model/account.dart';
+class IncomeGridUI extends StatelessWidget {
+  const IncomeGridUI({Key? key, required this.income}) : super(key: key);
 
-class AccountGridUI extends StatelessWidget {
-  const AccountGridUI({Key? key, required this.account}) : super(key: key);
-
-  final Account account;
+  final Income income;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +20,11 @@ class AccountGridUI extends StatelessWidget {
           children: [
             FaIcon(FontAwesomeIcons.moneyBill),
             Text(
-              "${account.balance}",
+              "${income.balance}",
               style: Theme.of(context).textTheme.headline6,
             ),
             Text(
-              account.label,
+              income.label,
               style: GoogleFonts.averageSans(
                   fontSize: 19
               ),

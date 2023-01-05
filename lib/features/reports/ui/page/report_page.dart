@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../accounts/ui/widgets/side_scrollable_accounts.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({Key? key}) : super(key: key);
@@ -60,7 +59,7 @@ class _ReportPageState extends State<ReportPage> {
                       //   padding: EdgeInsets.only(top: 100,bottom: 20),
                       //   height: 100,
                       //     width: 150,
-                      //     child: SideScrollableAccounts()
+                      //     child: SideScrollableIncomes()
                       // ),
                       DecoratedBox(
                         decoration: BoxDecoration(

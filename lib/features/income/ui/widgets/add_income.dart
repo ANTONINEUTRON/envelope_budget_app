@@ -1,20 +1,23 @@
+import 'package:envelope_budget_app/features/income/data/model/income.dart';
 import 'package:envelope_budget_app/utils/error_text_widget.dart';
 import 'package:envelope_budget_app/utils/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../bloc/account_bloc.dart';
+import '../bloc/Income_bloc.dart';
 
-class AddAccount extends StatefulWidget {
-  const AddAccount({Key? key}) : super(key: key);
+class AddIncome extends StatefulWidget {
+  const AddIncome({Key? key}) : super(key: key);
 
   @override
-  State<AddAccount> createState() => _AddAccountState();
+  State<AddIncome> createState() => _AddIncomeState();
 }
 
-class _AddAccountState extends State<AddAccount> {
+class _AddIncomeState extends State<AddIncome> {
   var _label = '';
   var _balance = 0.0;
+  IncomeType _incomeType = IncomeType.others;
+  final List<String> _incomeTypes = IncomeType.values.map((e) => e.name).toList();
   var _errorMsg = '';
 
   @override
@@ -57,8 +60,8 @@ class _AddAccountState extends State<AddAccount> {
               //validate inputs with appropriete reponse
               if(_areInputsValid()){
                 // //pass value to bloc for saving
-                // context.read<AccountBloc>()
-                //     .saveAccount(label: _label, amount: _balance, deadline: _deadline);
+                // context.read<IncomeBloc>()
+                //     .saveIncome(label: _label, amount: _balance, deadline: _deadline);
                 // // and close modal when saved
                 // Navigator.pop(context);
                 // ScaffoldMessenger.of(context).showSnackBar(

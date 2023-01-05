@@ -1,27 +1,28 @@
 
-import 'package:envelope_budget_app/features/accounts/data/model/account.dart';
+import 'package:envelope_budget_app/features/income/data/model/income.dart';
+import 'package:envelope_budget_app/features/income/ui/bloc/income_bloc.dart';
+import 'package:envelope_budget_app/features/income/ui/widgets/income_grid_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../bloc/account_bloc.dart';
-import '../widgets/account_grid_ui.dart';
-import '../widgets/add_account.dart';
+import '../widgets/add_income.dart';
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({Key? key}) : super(key: key);
+
+class IncomePage extends StatefulWidget {
+  const IncomePage({Key? key}) : super(key: key);
 
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  State<IncomePage> createState() => _IncomePageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _IncomePageState extends State<IncomePage> {
   @override
   Widget build(BuildContext context) {
-    List<Account> accounts = context.watch<AccountBloc>().state;
+    List<Income> incomes = context.watch<IncomeBloc>().state;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Accounts"),
+        title: Text("Incomes"),
       ),
       body: GridView(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -29,7 +30,7 @@ class _AccountPageState extends State<AccountPage> {
           mainAxisExtent: 150
         ),
         children: [
-          for(var account in accounts) AccountGridUI(account: account),
+          for(var income in incomes) IncomeGridUI(income: income),
           SizedBox(
               height: 150,
               width: 150,
@@ -39,7 +40,7 @@ class _AccountPageState extends State<AccountPage> {
                   showModalBottomSheet(
                       context: context,
                       builder: (context){
-                        return AddAccount();
+                        return AddIncome();
                       }
                   );
                 },

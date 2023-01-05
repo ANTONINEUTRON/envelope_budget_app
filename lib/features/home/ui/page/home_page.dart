@@ -1,8 +1,8 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:envelope_budget_app/features/income/ui/pages/income_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../../../accounts/ui/pages/account_page.dart';
 import '../../../budgets/ui/page/budgets_page.dart';
 import '../../../notifications/ui/page/notification_page.dart';
 import '../../../reports/ui/page/report_page.dart';
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
           children: const <Widget>[
             ReportPage(),
             BudgetsPage(),
-            AccountPage(),
+            IncomePage(),
             NotificationPage()
           ],
         ),
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
         ),
         BottomNavyBarItem(
           icon: const FaIcon(FontAwesomeIcons.buildingColumns),
-          title: const Text("Accounts")
+          title: const Text("Incomes")
         ),
         BottomNavyBarItem(
           icon: const Icon(Icons.notifications),
