@@ -18,7 +18,13 @@ class IncomeGridUI extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            FaIcon(FontAwesomeIcons.moneyBill),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: FaIcon(
+                  mapOfIconsToIncomeTypes[income.incomeType],
+                size: 50,
+              ),
+            ),
             Text(
               "${income.balance}",
               style: Theme.of(context).textTheme.headline6,
