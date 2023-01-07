@@ -10,32 +10,46 @@ class IncomeGridUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: FaIcon(
-                  mapOfIconsToIncomeTypes[income.incomeType],
-                size: 50,
+    return InkWell(
+      // onTap: (){
+      //   showModalBottomSheet(
+      //       context: context,
+      //       builder: (context){
+      //         return Container(
+      //           child: Text("ADD Income"),
+      //         );
+      //       }
+      //   );
+      // },
+      child: Card(
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: FaIcon(
+                    mapOfIconsToIncomeTypes[income.incomeType],
+                  size: 50,
+                ),
               ),
-            ),
-            Text(
-              "${income.balance}",
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            Text(
-              income.label,
-              style: GoogleFonts.averageSans(
-                  fontSize: 19
+              Text(
+                "${income.balance}",
+                style: Theme.of(context).textTheme.headline6,
               ),
-            )
-          ],
+              Text(
+                income.label,
+                style: GoogleFonts.averageSans(
+                    fontSize: 19
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              )
+            ],
+          ),
         ),
       ),
     );

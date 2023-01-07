@@ -23,25 +23,18 @@ class _SideScrollableIncomesState extends State<SideScrollableIncomes> {
     List<Income> _incomes = context.watch<IncomeBloc>().state;
 
     double height = 150;
-    return ListView(
+    return ListView.builder(
       scrollDirection: Axis.horizontal,
-      children: [
-        SizedBox(
-          height: height,
-          width: height,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            itemCount: _incomes.length,
-            itemBuilder: (context, index){
-              var income = _incomes[index];
+      shrinkWrap: true,
+      itemCount: _incomes.length,
+      itemBuilder: (context, index){
+        var income = _incomes[index];
 
-              return IncomeGridUI(income: income,);
-            },
-          ),
-        ),
-
-      ],
+        return SizedBox(
+            width:140,
+            child: IncomeGridUI(income: income,)
+        );
+      },
     );
   }
 }

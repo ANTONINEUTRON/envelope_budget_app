@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
   final _pageController = PageController(initialPage: 1);
 
   @override
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
     return [
         BottomNavyBarItem(
           icon: const Icon(Icons.pie_chart),
-          title: const Text("Reports")
+          title: const Text("Overview")
         ),
         BottomNavyBarItem(
             icon: const FaIcon(FontAwesomeIcons.envelope),
