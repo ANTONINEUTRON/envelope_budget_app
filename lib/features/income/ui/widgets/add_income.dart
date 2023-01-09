@@ -16,7 +16,7 @@ class AddIncome extends StatefulWidget {
 class _AddIncomeState extends State<AddIncome> {
   var _note = '';
   var _balance = 0.0;
-  IncomeType _incomeType = IncomeType.others;
+  IncomeType? _incomeType;
   final List<IncomeType> _incomeTypes = IncomeType.values;//.map((e) => e.name).toList();
   var _errorMsg = '';
 
@@ -71,6 +71,7 @@ class _AddIncomeState extends State<AddIncome> {
               Center(
                 child: DropdownButton<IncomeType>(
                   value: _incomeType,
+                  hint: Text("Type of Income"),
                   borderRadius: BorderRadius.circular(5),
                   items: _incomeTypes.map((incomeTypeItem){
                     return DropdownMenuItem(
@@ -90,7 +91,7 @@ class _AddIncomeState extends State<AddIncome> {
                   }).toList(),
                   onChanged: (newIncomeType){
                     setState(() {
-                      _incomeType = newIncomeType ?? IncomeType.others;
+                      _incomeType = newIncomeType;
                     });
                   },
                 ),
@@ -103,7 +104,11 @@ class _AddIncomeState extends State<AddIncome> {
               if(_areInputsValid()){
                 //pass value to bloc for saving
                 context.read<IncomeBloc>()
-                    .saveIncome(label: _note, balance: _balance, incomeType: _incomeType);
+                    .saveIncome(
+                    label: _note,
+                    balance: _balance,
+                    incomeType: _incomeType ?? IncomeType.others
+                );
                 // and close modal when saved
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -113,12 +118,12 @@ class _AddIncomeState extends State<AddIncome> {
             },
             child:  Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 FaIcon(
                     FontAwesomeIcons.save
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left:5.0),
+                  padding: EdgeInsets.only(left:5.0),
                   child: Text("SAVE"),
                 )
               ],

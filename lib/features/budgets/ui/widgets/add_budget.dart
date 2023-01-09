@@ -1,4 +1,5 @@
 import 'package:envelope_budget_app/features/budgets/ui/widgets/close_modal.dart';
+import 'package:envelope_budget_app/features/income/ui/widgets/accounts_dropdown.dart';
 import 'package:envelope_budget_app/utils/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,6 +76,7 @@ class _AddBudgetState extends State<AddBudget> {
                   : DateFormat('E, MMM dd y').format(_deadline)
             ),
           ),
+          const AccountsDropdown(),
           ElevatedButton(
             onPressed: (){
               //validate inputs with appropriete reponse

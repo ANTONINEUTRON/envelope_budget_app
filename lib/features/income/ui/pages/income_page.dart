@@ -22,7 +22,7 @@ class _IncomePageState extends State<IncomePage> {
     List<Income> incomes = context.watch<IncomeBloc>().state;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Incomes"),
+        title: Text("Source of Income"),
       ),
       body: GridView(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
