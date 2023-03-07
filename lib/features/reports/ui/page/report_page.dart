@@ -43,7 +43,7 @@ class _ReportPageState extends State<ReportPage> {
                   Text("#2000")
                 ],
               ),
-              expandedHeight: 250,
+              expandedHeight: 120,
               stretch: true,
               flexibleSpace: FlexibleSpaceBar(
                 stretchModes: const [

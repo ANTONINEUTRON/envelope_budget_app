@@ -16,7 +16,7 @@ class IncomeBloc extends Cubit<List<Income>>{
   Future<void> saveIncome({
     required String label,
     required double balance,
-    required IncomeType incomeType
+    required CardProvider incomeType
   }) async {
     var income = Income(label: label, balance: balance, incomeType: incomeType);
     if(await incomeRepo.recordIncome(income: income)){

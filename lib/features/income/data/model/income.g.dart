@@ -9,19 +9,17 @@ part of 'income.dart';
 Income _$IncomeFromJson(Map<String, dynamic> json) => Income(
       label: json['label'] as String,
       balance: (json['balance'] as num).toDouble(),
-      incomeType: $enumDecode(_$IncomeTypeEnumMap, json['incomeType']),
+      incomeType: $enumDecode(_$CardProviderEnumMap, json['incomeType']),
     );
 
 Map<String, dynamic> _$IncomeToJson(Income instance) => <String, dynamic>{
       'label': instance.label,
       'balance': instance.balance,
-      'incomeType': _$IncomeTypeEnumMap[instance.incomeType]!,
+      'incomeType': _$CardProviderEnumMap[instance.incomeType]!,
     };
 
-const _$IncomeTypeEnumMap = {
-  IncomeType.cash_in_hand: 'cash_in_hand',
-  IncomeType.bank: 'bank',
-  IncomeType.wallet: 'wallet',
-  IncomeType.card: 'card',
-  IncomeType.others: 'others',
+const _$CardProviderEnumMap = {
+  CardProvider.visa: 'visa',
+  CardProvider.mastercard: 'mastercard',
+  CardProvider.verve: 'verve',
 };

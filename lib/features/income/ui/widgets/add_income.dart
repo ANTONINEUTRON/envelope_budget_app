@@ -16,84 +16,110 @@ class AddIncome extends StatefulWidget {
 class _AddIncomeState extends State<AddIncome> {
   var _note = '';
   var _balance = 0.0;
-  IncomeType? _incomeType;
-  final List<IncomeType> _incomeTypes = IncomeType.values;//.map((e) => e.name).toList();
+  CardProvider? _incomeType;
+  final List<CardProvider> _incomeTypes = CardProvider.values;//.map((e) => e.name).toList();
   var _errorMsg = '';
+
+  var _cardNumber = '';
+  var _cardOwnerName = '';
+  var _cardCVV = '';
+  var _cardExpiryDate = '';
+  var _cardProvider = '';
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 30, 10,
+      padding: EdgeInsets.fromLTRB(10, 10, 10,
           getBottomPaddingForKeyboardToShow(
               MediaQuery.of(context).viewInsets.bottom)),
       child: ListView(
         shrinkWrap: true,
         children: [
           Text(
-            "RECORD INCOME",
+            "Fund Wallet",
             style: Theme.of(context).textTheme.headline5,
           ),
           ErrorTextWidget(errorMsg: _errorMsg),
+          DropdownButton<CardProvider>(
+            value: _incomeType,
+            hint: Text("Card Provider"),
+            borderRadius: BorderRadius.circular(5),
+            items: _incomeTypes.map((incomeTypeItem){
+              return DropdownMenuItem(
+                  value: incomeTypeItem,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: FaIcon(
+                            mapOfIconsToIncomeTypes[incomeTypeItem]
+                        ),
+                      ),
+                      Text(incomeTypeItem.name.replaceAll("_", " ").toUpperCase())
+                    ],
+                  )
+              );
+            }).toList(),
+            onChanged: (newIncomeType){
+              setState(() {
+                _incomeType = newIncomeType;
+                _cardProvider = newIncomeType.toString();
+              });
+            },
+          ),
           Padding(
             padding: const EdgeInsets.only(bottom:10.0),
             child: TextField(
-              maxLines: 1,
-              onChanged: (newAmount){
-                setState(()=>_balance = double.tryParse(newAmount) ?? 0.0);
+              onChanged: (newValue){
+                setState(()=>_cardNumber = newValue);
               },
               decoration: InputDecoration(
-                  labelText: "AMOUNT",
-                  hintText: "0.0",
+                  labelText: "Card Number",
                   border: OutlineInputBorder()
               ),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
           ),
           TextField(
-            maxLines: 2,
-            onChanged: (newLabel){
-              setState(()=>_note=newLabel);
+            onChanged: (newValue){
+              setState(()=>_cardOwnerName = newValue);
             },
             decoration: const InputDecoration(
-                labelText: "NOTE",
+                labelText: "Card Owner Name",
                 border: OutlineInputBorder()
             ),
           ),
+          const SizedBox(height: 10,),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(
-                "Income Source",
-                style: Theme.of(context).textTheme.headline6?.copyWith(
-                  fontSize: 18
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.3,
+                child: TextField(
+                  maxLength: 3,
+                  onChanged: (newValue){
+                    setState(()=>_cardCVV = newValue);
+                  },
+                  decoration: const InputDecoration(
+                      labelText: "Card CVV",
+                      hintText: "000",
+                      border: OutlineInputBorder()
+                  ),
+                  keyboardType: TextInputType.number,
                 ),
               ),
-              Center(
-                child: DropdownButton<IncomeType>(
-                  value: _incomeType,
-                  hint: Text("Type of Income"),
-                  borderRadius: BorderRadius.circular(5),
-                  items: _incomeTypes.map((incomeTypeItem){
-                    return DropdownMenuItem(
-                        value: incomeTypeItem,
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: FaIcon(
-                                  mapOfIconsToIncomeTypes[incomeTypeItem]
-                              ),
-                            ),
-                            Text(incomeTypeItem.name.replaceAll("_", " ").toUpperCase())
-                          ],
-                        )
-                    );
-                  }).toList(),
-                  onChanged: (newIncomeType){
-                    setState(() {
-                      _incomeType = newIncomeType;
-                    });
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.3,
+                child: TextField(
+                  onChanged: (newValue){
+                    setState(()=>_cardExpiryDate = newValue);
                   },
+                  maxLength: 5,
+                  decoration: const InputDecoration(
+                      labelText: "Expiry Date",
+                      hintText: "00/00",
+                      border: OutlineInputBorder()
+                  ),
                 ),
               ),
             ],
@@ -103,12 +129,12 @@ class _AddIncomeState extends State<AddIncome> {
               //validate inputs with appropriete reponse
               if(_areInputsValid()){
                 //pass value to bloc for saving
-                context.read<IncomeBloc>()
-                    .saveIncome(
-                    label: _note,
-                    balance: _balance,
-                    incomeType: _incomeType ?? IncomeType.others
-                );
+                // context.read<IncomeBloc>()
+                //     .saveIncome(
+                //     label: _note,
+                //     balance: _balance,
+                //     incomeType: _incomeType ?? CardProvider.others
+                // );
                 // and close modal when saved
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -134,18 +160,39 @@ class _AddIncomeState extends State<AddIncome> {
     );
   }
 
+  var expiryRE = RegExp(r"/\b(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})\b/");
+  var cvvRE = RegExp(r"/^[0-9]{3,4}$/");
   bool _areInputsValid() {
-    if(_balance <= 0){
-      setState(() {
-        _errorMsg = "Enter a valid balance";
-      });
-      return false;
-    }else if(_note.length < 2){
-      setState(() {
-        _errorMsg = "Enter a note (can be bank name, wallet provider) for this income";
-      });
-      return false;
+    // if(_balance <= 0){
+    //   setState(() {
+    //     _errorMsg = "Enter a valid balance";
+    //   });
+    //   return false;
+    // }else if(_note.length < 2){
+    //   setState(() {
+    //     _errorMsg = "Enter a note (can be bank name, wallet provider) for this income";
+    //   });
+    //   return false;
+    // }
+    if(_cardNumber.length < 11){
+      return setErrorMsg("Please provide a valid credit card number");
+    }else if(!_cardExpiryDate.contains("/")){
+      print(_cardExpiryDate);
+      return setErrorMsg("Please provide a valid expiry date on your card");
+    }else if(_cardOwnerName.length < 4){
+      return setErrorMsg("Please provide a valid name associated with the credit card");
+    }else if(!cvvRE.hasMatch(_cardCVV)){
+      return setErrorMsg("Please provide a valid CVV");
+    }else if(_cardProvider.isEmpty){
+      return setErrorMsg("You need to select a card provider");
     }
     return true;
+  }
+
+  bool setErrorMsg(String msg) {
+    setState(() {
+      _errorMsg = msg;
+    });
+    return false;
   }
 }

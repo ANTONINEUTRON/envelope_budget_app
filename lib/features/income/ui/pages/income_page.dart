@@ -22,7 +22,7 @@ class _IncomePageState extends State<IncomePage> {
     List<Income> incomes = context.watch<IncomeBloc>().state;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Source of Income"),
+        title: Text("Income"),
       ),
       body: GridView(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -31,31 +31,35 @@ class _IncomePageState extends State<IncomePage> {
         ),
         children: [
           for(var income in incomes) IncomeGridUI(income: income),
-          SizedBox(
-              height: 150,
-              width: 150,
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: (){
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (context){
-                        return AddIncome();
-                      }
-                  );
-                },
-                child: const Card(
-                  child: Center(
-                    child: FaIcon(
-                      FontAwesomeIcons.plus,
-                      size: 100,
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                ),
-              )
-          )
+          // SizedBox(
+          //     height: 150,
+          //     width: 150,
+          //     child: GestureDetector(
+          //       behavior: HitTestBehavior.translucent,
+          //       onTap: ,
+          //       child: const Card(
+          //         child: Center(
+          //           child: FaIcon(
+          //             FontAwesomeIcons.plus,
+          //             size: 100,
+          //             color: Colors.lightBlue,
+          //           ),
+          //         ),
+          //       ),
+          //     )
+          // )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          showModalBottomSheet(
+              context: context,
+              builder: (context){
+                return AddIncome();
+              }
+          );
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

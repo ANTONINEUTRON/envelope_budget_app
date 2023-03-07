@@ -4,16 +4,14 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:equatable/equatable.dart';
 
 part 'income.g.dart';
-enum IncomeType{
-  cash_in_hand, bank, wallet, card, others;
+enum CardProvider{
+  visa, mastercard, verve;
 }
 
-Map<IncomeType,IconData> mapOfIconsToIncomeTypes = {
-  IncomeType.bank : FontAwesomeIcons.buildingColumns,
-  IncomeType.cash_in_hand : FontAwesomeIcons.moneyBill,
-  IncomeType.card : FontAwesomeIcons.creditCard,
-  IncomeType.wallet : FontAwesomeIcons.wallet,
-  IncomeType.others : FontAwesomeIcons.ellipsis
+Map<CardProvider,IconData> mapOfIconsToIncomeTypes = {
+  CardProvider.visa : FontAwesomeIcons.ccVisa,
+  CardProvider.mastercard : FontAwesomeIcons.ccMastercard,
+  CardProvider.verve : FontAwesomeIcons.creditCard,
 };
 
 
@@ -21,7 +19,7 @@ Map<IncomeType,IconData> mapOfIconsToIncomeTypes = {
 class Income extends Equatable{
   final String label;
   double balance;
-  final IncomeType incomeType;
+  final CardProvider incomeType;
 
   Income({
     required this.label,
