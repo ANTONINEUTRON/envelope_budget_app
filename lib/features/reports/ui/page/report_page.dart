@@ -1,12 +1,15 @@
 import 'package:envelope_budget_app/features/budgets/data/model/expense.dart';
 import 'package:envelope_budget_app/features/budgets/ui/bloc/budget_bloc.dart';
 import 'package:envelope_budget_app/features/budgets/ui/widgets/expense_ui.dart';
+import 'package:envelope_budget_app/features/home/ui/bloc/balance_bloc.dart';
 import 'package:envelope_budget_app/features/income/ui/widgets/side_scrollable_incomes.dart';
 import 'package:envelope_budget_app/features/reports/ui/widgets/grid_summary_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../income/ui/widgets/add_income.dart';
 
 
 class ReportPage extends StatefulWidget {
@@ -17,8 +20,11 @@ class ReportPage extends StatefulWidget {
 }
 
 class _ReportPageState extends State<ReportPage> {
+  double _balance = 0.0;
+
   @override
   Widget build(BuildContext context) {
+    _balance = context.watch<BalanceBloc>().state;
 
     return FutureBuilder(
       future: context.watch<BudgetBloc>().getAllExpenses(),
@@ -39,8 +45,18 @@ class _ReportPageState extends State<ReportPage> {
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Total balance"),
-                  Text("#2000")
+                  Text(
+                    "Balance",
+                    style: GoogleFonts.averageSans(
+                        textStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.lightBlue.shade200)
+                    ),
+                  ),
+                  Text(
+                    "NGN $_balance",
+                    style: GoogleFonts.alumniSans(
+                        textStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.lightBlue.shade100)
+                    ),
+                  )
                 ],
               ),
               expandedHeight: 120,
@@ -57,7 +73,33 @@ class _ReportPageState extends State<ReportPage> {
                     Container(
                         padding: EdgeInsets.fromLTRB(5, 100, 5, 20),
                         height: 100,
-                        child: SideScrollableIncomes()
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // MaterialButton(
+                            //     onPressed: (){},
+                            //   child: Text("withdraw"),
+                            //   color: Colors.white70,
+                            // ),
+                            ElevatedButton(
+                                onPressed: (){
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context){
+                                      return AddIncome();
+                                    }
+                                  );
+                              },
+                              child: Text("fund wallet"),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.lightBlue.shade100,
+                                  foregroundColor: Colors.blue.shade900,
+                                  shape: StadiumBorder()
+                              )
+                            )
+                          ]
+                        )
+                        //child: SideScrollableIncomes()
                     ),
                     DecoratedBox(
                       decoration: BoxDecoration(
@@ -65,8 +107,9 @@ class _ReportPageState extends State<ReportPage> {
                           begin: Alignment(0.0, 0.5),
                           end: Alignment.center,
                           colors: <Color>[
-                            Color(0x60000000),
-                            Color(0x00000000),
+                            // Color(0x60000000),
+                            Color(0x30000000),
+                            Color(0x30000000),
                           ],
                         ),
                       ),

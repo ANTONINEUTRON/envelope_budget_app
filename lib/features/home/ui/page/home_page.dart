@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
           children: const <Widget>[
             ReportPage(),
             BudgetsPage(),
-            IncomePage(),
+            // IncomePage(),
             NotificationPage()
           ],
         ),
@@ -50,16 +50,16 @@ class _HomePageState extends State<HomePage> {
     return [
         BottomNavyBarItem(
           icon: const Icon(Icons.pie_chart),
-          title: const Text("Overview")
+          title: const Text("Overview"),
         ),
         BottomNavyBarItem(
             icon: const FaIcon(FontAwesomeIcons.envelope),
             title: const Text("Budgets")
         ),
-        BottomNavyBarItem(
-          icon: const FaIcon(FontAwesomeIcons.buildingColumns),
-          title: const Text("Incomes")
-        ),
+        // BottomNavyBarItem(
+        //   icon: const FaIcon(FontAwesomeIcons.buildingColumns),
+        //   title: const Text("Incomes")
+        // ),
         BottomNavyBarItem(
           icon: const Icon(Icons.notifications),
           title: const Text("Notifications")

@@ -29,6 +29,7 @@ class IncomeRepository {
     var incomes = await getAllIncomes();
     //add income
     incomes.add(income);
+
     //encode to json
     var pref = await SharedPreferences.getInstance();
     //save to sharedpref

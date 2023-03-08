@@ -1,9 +1,12 @@
+import 'package:envelope_budget_app/features/home/ui/bloc/balance_bloc.dart';
 import 'package:envelope_budget_app/features/income/ui/bloc/income_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/budgets/data/repositories/budget_repository.dart';
 import 'features/budgets/ui/bloc/budget_bloc.dart';
 import 'features/home/ui/page/home_page.dart';
+import 'features/income/data/repository/balance_repository.dart';
+import 'features/income/data/repository/card_repository.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +23,12 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => BudgetRepository(),
         ),
+        RepositoryProvider(
+          create: (context) => CardRepository(),
+        ),
+        RepositoryProvider(
+          create: (context) => BalanceRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -30,6 +39,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context)=> IncomeBloc(),
+          ),
+          BlocProvider(
+            create: (context)=> BalanceBloc(),
           )
         ],
         child: MaterialApp(

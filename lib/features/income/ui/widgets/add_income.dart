@@ -1,10 +1,13 @@
 import 'package:envelope_budget_app/features/income/data/model/income.dart';
 import 'package:envelope_budget_app/features/income/ui/bloc/income_bloc.dart';
+import 'package:envelope_budget_app/features/income/ui/widgets/billing_details.dart';
 import 'package:envelope_budget_app/utils/error_text_widget.dart';
 import 'package:envelope_budget_app/utils/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../data/model/card.dart';
 
 class AddIncome extends StatefulWidget {
   const AddIncome({Key? key}) : super(key: key);
@@ -25,6 +28,7 @@ class _AddIncomeState extends State<AddIncome> {
   var _cardCVV = '';
   var _cardExpiryDate = '';
   var _cardProvider = '';
+  var _amount = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +132,25 @@ class _AddIncomeState extends State<AddIncome> {
             onPressed: (){
               //validate inputs with appropriete reponse
               if(_areInputsValid()){
+                Navigator.pop(context);
+                //show alert
+                showDialog(
+                    context: context,
+                    builder: (context){
+                      return AlertDialog(
+                        title: Text("Billing Details"),
+                        content: BillingDetails(
+                          card: CCard(
+                            cvv: _cardCVV,
+                            expiryDate: _cardExpiryDate,
+                            name: _cardOwnerName,
+                            number: _cardNumber,
+                            provider: _cardProvider
+                          )
+                        ),
+                      );
+                    }
+                );
                 //pass value to bloc for saving
                 // context.read<IncomeBloc>()
                 //     .saveIncome(
@@ -136,7 +159,6 @@ class _AddIncomeState extends State<AddIncome> {
                 //     incomeType: _incomeType ?? CardProvider.others
                 // );
                 // and close modal when saved
-                Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("$_note Added Successfully"))
                 );
@@ -161,7 +183,7 @@ class _AddIncomeState extends State<AddIncome> {
   }
 
   var expiryRE = RegExp(r"/\b(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})\b/");
-  var cvvRE = RegExp(r"/^[0-9]{3,4}$/");
+  var cvvRE = RegExp(r'/^[0-9]{3,4}$/');
   bool _areInputsValid() {
     // if(_balance <= 0){
     //   setState(() {
@@ -176,12 +198,12 @@ class _AddIncomeState extends State<AddIncome> {
     // }
     if(_cardNumber.length < 11){
       return setErrorMsg("Please provide a valid credit card number");
-    }else if(!_cardExpiryDate.contains("/")){
+    }else if(_cardExpiryDate[2] != '/'){
       print(_cardExpiryDate);
       return setErrorMsg("Please provide a valid expiry date on your card");
     }else if(_cardOwnerName.length < 4){
       return setErrorMsg("Please provide a valid name associated with the credit card");
-    }else if(!cvvRE.hasMatch(_cardCVV)){
+    }else if(_cardCVV.length < 3){
       return setErrorMsg("Please provide a valid CVV");
     }else if(_cardProvider.isEmpty){
       return setErrorMsg("You need to select a card provider");
@@ -193,6 +215,13 @@ class _AddIncomeState extends State<AddIncome> {
     setState(() {
       _errorMsg = msg;
     });
+    Future.delayed(Duration(seconds: 30),() {
+      setState(() {
+        _errorMsg = '';
+      });
+    },);
     return false;
   }
+
+  String truncatedCardNum() => _cardNumber.replaceRange(4, _cardNumber.length-4, "******");
 }
