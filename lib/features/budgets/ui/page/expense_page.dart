@@ -30,7 +30,7 @@ class ExpensePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title),
-                Text("${amount}")
+                Text("NGN ${amount}")
               ],
             ),
             expandedHeight: 350,

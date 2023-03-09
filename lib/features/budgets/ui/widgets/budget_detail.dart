@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../utils/error_text_widget.dart';
+import '../../../home/ui/bloc/balance_bloc.dart';
 import '../../data/model/expense.dart';
 import '../page/expense_page.dart';
 import 'budget_ui.dart';
@@ -92,6 +93,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
           ),
           ElevatedButton(
             onPressed: (){
+              if(!_areInputsValid()) return;
               //navigator close
               Navigator.pop(context);
               //show dialog
@@ -104,6 +106,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          ErrorTextWidget(errorMsg: _errorMsg),
                           TextField(
                             onChanged: (newValue){
                               setState(()=>_account = newValue);
@@ -181,6 +184,11 @@ class _BudgetDetailState extends State<BudgetDetail> {
     }else if(_amount > (widget.budget.getRemsAmount()) || _amount < 1){
       setState(() {
         _errorMsg = "Invalid amount entered!";
+      });
+      return false;
+    }else if(_amount > context.read<BalanceBloc>().state){
+      setState(() {
+        _errorMsg = "Amount entered exceeds your wallet balance\nPlease Fund You account";
       });
       return false;
     }
