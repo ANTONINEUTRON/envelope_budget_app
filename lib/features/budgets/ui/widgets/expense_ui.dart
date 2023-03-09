@@ -39,7 +39,10 @@ class ExpenseUI extends StatelessWidget {
                               children: [
                                 Flexible(
                                     child: Text(
-                                        "${expense.amount}"
+                                        "NGN ${expense.amount}",
+                                      style: GoogleFonts.alumniSans(
+                                          fontSize: 19
+                                      ),
                                     )
                                 ),
                                 Flexible(

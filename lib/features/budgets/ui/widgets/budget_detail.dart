@@ -28,6 +28,9 @@ class _BudgetDetailState extends State<BudgetDetail> {
   var _amountController = TextEditingController();
   var _labelController = TextEditingController();
 
+  String _account = "";
+  String _bank = "";
+
   @override
   Widget build(BuildContext context) {
     var bloc = context.watch<BudgetBloc>();
@@ -88,25 +91,68 @@ class _BudgetDetailState extends State<BudgetDetail> {
             ),
           ),
           ElevatedButton(
-              onPressed: (){
-                //validate input
-                if(_areInputsValid()) {
-                  //save to bloc
-                  ///add expense to budget
-                  var expense = Expense(
-                    id: DateTime.now(),
-                    label: _label,
-                    amount: _amount
-                  );
-                  var updatedBudget = widget.budget;
-                  updatedBudget.expenses.add(expense);
-                  ///pass budget to bloc.updateBudget
-                  context.read<BudgetBloc>().updateBudget(updatedBudget);
-                  resetValues();
-                }
-              },
-              child: Text("SAVE")
-          )
+            onPressed: (){
+              //navigator close
+              Navigator.pop(context);
+              //show dialog
+              showDialog(
+                  context: context,
+                  builder: (context){
+                    return AlertDialog(
+                      title: Text("Payment Processor"),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextField(
+                            onChanged: (newValue){
+                              setState(()=>_account = newValue);
+                            },
+                            decoration: const InputDecoration(
+                                labelText: "Account Number",
+                                border: OutlineInputBorder()
+                            ),
+                            keyboardType: TextInputType.number,
+                            maxLength: 10,
+                          ),
+                          TextField(
+                            onChanged: (newValue){
+                              setState(()=>_bank = newValue);
+                            },
+                            decoration: const InputDecoration(
+                                labelText: "Bank Name",
+                                border: OutlineInputBorder()
+                            ),
+                          ),
+                          ElevatedButton(
+                              onPressed: (){
+                                //validate input
+                                if(_areInputsValid()) {
+                                  //save to bloc
+                                  ///add expense to budget
+                                  var expense = Expense(
+                                      id: DateTime.now(),
+                                      label: _label,
+                                      amount: _amount
+                                  );
+                                  var updatedBudget = widget.budget;
+                                  updatedBudget.expenses.add(expense);
+                                  ///pass budget to bloc.updateBudget
+                                  context.read<BudgetBloc>().updateBudget(updatedBudget);
+                                  resetValues();
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: Text("Complete Transaction")
+                          )
+                        ],
+                      ),
+                    );
+                  }
+              );
+            },
+            child: Text("Make Payment"),
+          ),
         ],
       ),
     );

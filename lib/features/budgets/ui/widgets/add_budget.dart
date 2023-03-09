@@ -25,13 +25,18 @@ class _AddBudgetState extends State<AddBudget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 30, 10,
+      padding: EdgeInsets.fromLTRB(10, 7, 10,
           getBottomPaddingForKeyboardToShow(
               MediaQuery.of(context).viewInsets.bottom)),
       child: ListView(
         shrinkWrap: true,
         children: [
           ErrorTextWidget(errorMsg: _errorMsg),
+          Text(
+            "Add Budget",
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          SizedBox(height: 5,),
           TextField(
             maxLines: 2,
             onChanged: (newLabel){
@@ -70,10 +75,17 @@ class _AddBudgetState extends State<AddBudget> {
                 });
               });
             },
-            child: Text(
-              _deadline.isBefore(DateTime.now())
-                  ? "SELECT DATE"
-                  : DateFormat('E, MMM dd y').format(_deadline)
+            child: Row(
+              children: [
+                Text(
+                  _deadline.isBefore(DateTime.now())
+                      ? "SELECT DATE"
+                      : DateFormat('E, MMM dd y').format(_deadline)
+                ),
+                _deadline.isBefore(DateTime.now())
+                  ? Icon(Icons.add_box)
+                  : Icon(Icons.edit)
+              ],
             ),
           ),
           const AccountsDropdown(),

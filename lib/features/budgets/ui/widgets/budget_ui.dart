@@ -36,9 +36,10 @@ class BudgetUI extends StatelessWidget {
                         budget.label,
                         style: GoogleFonts.dmSans(
                             textStyle: Theme.of(context).textTheme.bodyLarge,
-                            fontSize: 16
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold
                         ),
-                        maxLines: 3,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Row(
@@ -48,13 +49,19 @@ class BudgetUI extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  "Amount: ${budget.amount}"
+                                  "Amount: NGN ${budget.amount}",
+                                style: GoogleFonts.alumniSans(
+                                  fontSize: 19
+                                ),
                               ),
+                              // Text(
+                              //     "Spent: ${budget.getAmountSpent()}"
+                              // ),
                               Text(
-                                  "Spent: ${budget.getAmountSpent()}"
-                              ),
-                              Text(
-                                  "Remaining: ${budget.getRemsAmount()}"
+                                  "Remaining: NGN ${budget.getRemsAmount()}",
+                                style: GoogleFonts.alumniSans(
+                                    fontSize: 18
+                                ),
                               )
                             ],
                           ),
@@ -64,12 +71,25 @@ class BudgetUI extends StatelessWidget {
                           )
                         ],
                       ),
-                      Slider(
-                        value: budget.getAmountSpent(),
-                        onChanged: (newValue){},
-                        label: "Remaining",
-                        max: budget.amount,
-                        min: 0,
+                      // Slider(
+                      //   value: budget.getAmountSpent(),
+                      //   onChanged: (newValue){},
+                      //   label: "Remaining",
+                      //   max: budget.amount,
+                      //   min: 0,
+                      // ),
+                      SizedBox(height: 10,),
+                      LinearProgressIndicator(
+                        minHeight: 10,
+                        value: budget.getAmountSpent()/budget.amount,
+                      ),
+                      Center(
+                          child: Text(
+                              "NGN ${budget.getAmountSpent()}",
+                            style: GoogleFonts.alumniSans(
+                                fontSize: 19
+                            ),
+                          )
                       )
                     ],
                   ),

@@ -21,16 +21,20 @@ class GridSummaryUI extends StatelessWidget {
           children: [
             FaIcon(
                 fAI,
-              size: 60,
+              size: 40,
             ),
             Text(
                 amount,
-              style: Theme.of(context).textTheme.headline6,
+              style: GoogleFonts.alumniSans(
+                  fontSize: 28,
+
+              ),
             ),
             Text(
                 label,
               style: GoogleFonts.averageSans(
-                fontSize: 19
+                fontSize: 19,
+                fontWeight: FontWeight.w500
               ),
             )
           ],
