@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../services/notification_service.dart';
 import '../../../../utils/error_text_widget.dart';
 import '../../../home/ui/bloc/balance_bloc.dart';
+import '../../../notifications/data/model/notification.dart';
 import '../../data/model/expense.dart';
 import '../page/expense_page.dart';
 import 'budget_ui.dart';
@@ -34,7 +36,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
 
   @override
   Widget build(BuildContext context) {
-    var bloc = context.watch<BudgetBloc>();
+    var notSer = NotificationService(context: context);
     var noOfExpenses = widget.budget.expenses.length;
 
     return Container(
@@ -47,7 +49,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
           // CloseModal(),
           SuccessTextWidget(msg: _successMsg),
           ErrorTextWidget(errorMsg: _errorMsg),
-          BudgetUI(budget: widget.budget,),
+          // BudgetUI(budget: widget.budget,),
           ElevatedButton(
             onPressed: (){
               Navigator.push(context, ExpensePage.route(budget: widget.budget));
@@ -91,68 +93,52 @@ class _BudgetDetailState extends State<BudgetDetail> {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top:8.0),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: TextField(
+                    onChanged: (value)=> _account=value,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                        labelText: "Account Number",
+                        border: OutlineInputBorder()
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.43,
+                  child: TextField(
+                    onChanged: (value)=> _bank = value,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                        labelText: "Bank Name",
+                        border: OutlineInputBorder()
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           ElevatedButton(
             onPressed: (){
               if(!_areInputsValid()) return;
               //navigator close
               Navigator.pop(context);
-              //show dialog
-              showDialog(
-                  context: context,
-                  builder: (context){
-                    return AlertDialog(
-                      title: Text("Payment Processor"),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ErrorTextWidget(errorMsg: _errorMsg),
-                          TextField(
-                            onChanged: (newValue){
-                              setState(()=>_account = newValue);
-                            },
-                            decoration: const InputDecoration(
-                                labelText: "Account Number",
-                                border: OutlineInputBorder()
-                            ),
-                            keyboardType: TextInputType.number,
-                            maxLength: 10,
-                          ),
-                          TextField(
-                            onChanged: (newValue){
-                              setState(()=>_bank = newValue);
-                            },
-                            decoration: const InputDecoration(
-                                labelText: "Bank Name",
-                                border: OutlineInputBorder()
-                            ),
-                          ),
-                          ElevatedButton(
-                              onPressed: (){
-                                //validate input
-                                if(_areInputsValid()) {
-                                  //save to bloc
-                                  ///add expense to budget
-                                  var expense = Expense(
-                                      id: DateTime.now(),
-                                      label: _label,
-                                      amount: _amount
-                                  );
-                                  var updatedBudget = widget.budget;
-                                  updatedBudget.expenses.add(expense);
-                                  ///pass budget to bloc.updateBudget
-                                  context.read<BudgetBloc>().updateBudget(updatedBudget);
-                                  resetValues();
-                                  Navigator.pop(context);
-                                }
-                              },
-                              child: Text("Complete Transaction")
-                          )
-                        ],
-                      ),
-                    );
-                  }
-              );
+              //clear error state
+              _errorMsg = "";
+              //save to bloc
+              ///add expense to budget
+              recordExpense(context);
+              // notSer.sendMessage("You made an Expense from '${widget.budget.label}' Budget which costs $_amount", NotificationType.normal);
+              //Check if budget has been exceeded
+              if(widget.budget.getAmountSpent() / widget.budget.amount > 0.7 && daysBetween(DateTime.now(), widget.budget.deadline) > 5 && !widget.budget.hasBudgetExceededAlertShown){
+                notSer.sendMessage("You have exceeded 70% of '${widget.budget.label}' Budget in a short while.\nYou are kindly advice to spend wisely", NotificationType.warning);
+              }
+              resetValues();
             },
             child: Text("Make Payment"),
           ),
@@ -161,13 +147,31 @@ class _BudgetDetailState extends State<BudgetDetail> {
     );
   }
 
+  void recordExpense(BuildContext context) {
+    var expense = Expense(
+        id: DateTime.now(),
+        label: _label,
+        amount: _amount
+    );
+    var updatedBudget = widget.budget;
+    updatedBudget.expenses.add(expense);
+    ///pass budget to bloc.updateBudget
+    context.read<BudgetBloc>().updateBudget(updatedBudget);
+    context.read<BalanceBloc>().debitBalance(_amount);
+  }
+
   void resetValues() {
     _successMsg = "Expense has been added successfully";
     _errorMsg = "";
     _amountController.text = "";
     _labelController.text = "";
     setState((){});
-    Future.delayed(const Duration(seconds: 20),()=>setState(()=> _successMsg=""));
+  }
+
+  int daysBetween(DateTime from, DateTime to) {
+    from = DateTime(from.year, from.month, from.day);
+    to = DateTime(to.year, to.month, to.day);
+    return (to.difference(from).inHours / 24).round();
   }
 
   bool _areInputsValid() {
@@ -189,6 +193,11 @@ class _BudgetDetailState extends State<BudgetDetail> {
     }else if(_amount > context.read<BalanceBloc>().state){
       setState(() {
         _errorMsg = "Amount entered exceeds your wallet balance\nPlease Fund You account";
+      });
+      return false;
+    }else if(_account.length != 10){
+      setState(() {
+        _errorMsg = "Please enter a valid account number";
       });
       return false;
     }

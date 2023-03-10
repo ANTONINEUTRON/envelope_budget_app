@@ -15,6 +15,8 @@ Budget _$BudgetFromJson(Map<String, dynamic> json) => Budget(
               ?.map((e) => Expense.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      hasBudgetExceededAlertShown:
+          json['hasBudgetExceededAlertShown'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$BudgetToJson(Budget instance) => <String, dynamic>{
@@ -23,4 +25,5 @@ Map<String, dynamic> _$BudgetToJson(Budget instance) => <String, dynamic>{
       'deadline': instance.deadline.toIso8601String(),
       'amount': instance.amount,
       'expenses': instance.expenses,
+      'hasBudgetExceededAlertShown': instance.hasBudgetExceededAlertShown,
     };

@@ -5,7 +5,9 @@ import '../../../income/data/repository/balance_repository.dart';
 
 class BalanceBloc extends Cubit<double>{
   BalanceBloc()
-      :super(0.0);
+      :super(0.0){
+    emitBalance();
+  }
 
   BalanceRepository balRepo = BalanceRepository();
 
@@ -14,7 +16,12 @@ class BalanceBloc extends Cubit<double>{
   }
 
   Future<void> addToBalance(double newAmount) async {
-    balRepo.addBalance(newAmount + state);
+    await balRepo.addBalance(newAmount + state);
+    emitBalance();
+  }
+
+  Future<void> debitBalance(double amount) async {
+    await balRepo.updateBalance(state - amount);
     emitBalance();
   }
 }

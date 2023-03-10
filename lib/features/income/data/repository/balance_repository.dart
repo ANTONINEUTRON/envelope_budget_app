@@ -15,4 +15,9 @@ class BalanceRepository{
     var sp = await SharedPreferences.getInstance();
     return sp.getDouble(_BalanceStoreKEY) ?? 0.0;
   }
+
+  Future<void> updateBalance(double newAmount) async{
+    var sharedPref = await SharedPreferences.getInstance();
+    sharedPref.setDouble(_BalanceStoreKEY, newAmount);
+  }
 }

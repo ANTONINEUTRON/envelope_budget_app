@@ -42,6 +42,8 @@ class _ReportPageState extends State<ReportPage> {
           return a.id.compareTo(b.id);
         },);
 
+        listOfExpenses = listOfExpenses.reversed.toList();
+
         return CustomScrollView(
           physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()

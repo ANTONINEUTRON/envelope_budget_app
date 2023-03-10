@@ -10,13 +10,15 @@ class Budget extends Equatable{
   final DateTime deadline;
   final double amount;
   final List<Expense> expenses;
+  bool hasBudgetExceededAlertShown;
 
   Budget({
     required this.id,
     required this.label,
     required this.deadline,
     required this.amount,
-    this.expenses = const []
+    this.expenses = const [],
+    this.hasBudgetExceededAlertShown = false
   });
 
   @override

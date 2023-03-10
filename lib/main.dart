@@ -7,6 +7,7 @@ import 'features/budgets/ui/bloc/budget_bloc.dart';
 import 'features/home/ui/page/home_page.dart';
 import 'features/income/data/repository/balance_repository.dart';
 import 'features/income/data/repository/card_repository.dart';
+import 'features/notifications/ui/bloc/notification_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,6 +43,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context)=> BalanceBloc(),
+          ),
+          BlocProvider(
+            create: (context)=> NotificationBloc(),
           )
         ],
         child: MaterialApp(
@@ -50,6 +54,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.deepPurple,
             scaffoldBackgroundColor: Colors.white70
           ),
+          debugShowCheckedModeBanner: false,
           home: const HomePage(),
         ),
       ),
