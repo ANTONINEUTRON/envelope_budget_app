@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/budgets/data/repositories/budget_repository.dart';
 import 'features/budgets/ui/bloc/budget_bloc.dart';
 import 'features/home/ui/page/home_page.dart';
+import 'features/home/ui/page/login_page.dart';
 import 'features/income/data/repository/balance_repository.dart';
 import 'features/income/data/repository/card_repository.dart';
 import 'features/notifications/ui/bloc/notification_bloc.dart';
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: Colors.white70
           ),
           debugShowCheckedModeBanner: false,
-          home: const HomePage(),
+          home: LoginPage()// const HomePage(),
         ),
       ),
     );
