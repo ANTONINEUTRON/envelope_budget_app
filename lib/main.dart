@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           title: 'Envelope Budget App',
           theme: ThemeData(
             primarySwatch: Colors.deepPurple,
-            scaffoldBackgroundColor: Colors.white70
+            scaffoldBackgroundColor: Colors.white
           ),
           debugShowCheckedModeBanner: false,
           home: LoginPage()// const HomePage(),

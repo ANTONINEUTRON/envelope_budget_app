@@ -41,7 +41,7 @@ class ExpensePage extends StatelessWidget {
                 StretchMode.blurBackground,
                 StretchMode.fadeTitle,
               ],
-              background: Stack(
+              background: expenses.isEmpty ? Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
                   PieChart(
@@ -62,6 +62,8 @@ class ExpensePage extends StatelessWidget {
                   //   ),
                   // ),
                 ],
+              ) : const Center(
+                child: Text("No Expenses has been made yet!"),
               ),
             ),
           ),

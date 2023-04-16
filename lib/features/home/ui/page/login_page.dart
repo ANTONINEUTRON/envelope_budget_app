@@ -141,9 +141,9 @@ class LoginState extends State<LoginPage> {
         emailErrorText = "Invalid email entered";
       });
       return false;
-    }else if(password != "123Eric"){
+    }else if(password != "123eric"){
       setState(() {
-        emailErrorText = "Invalid password entered";
+        passwordErrorText = "Invalid password entered";
       });
       return false;
     }
