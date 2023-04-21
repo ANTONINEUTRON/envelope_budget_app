@@ -32,7 +32,9 @@ class _BudgetDetailState extends State<BudgetDetail> {
   var _labelController = TextEditingController();
 
   String _account = "";
-  String _bank = "";
+  String? _bank;
+
+  final _listOfBanks  = ["Access Bank","Eco Bank","F.C.M.B","First Bank","GT Bank","Jaiz bank","Stanbic IBTC Bank","Polaris Bank","U.B.A","Zenith Bank"];
 
   @override
   Widget build(BuildContext context) {
@@ -111,14 +113,22 @@ class _BudgetDetailState extends State<BudgetDetail> {
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.43,
-                  child: TextField(
-                    onChanged: (value)=> _bank = value,
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                        labelText: "Bank Name",
-                        border: OutlineInputBorder()
-                    ),
-                  ),
+                  child: DropdownButton<String>(
+                    value: _bank,
+                    items: _listOfBanks.map((bankName)=>DropdownMenuItem(
+                      value: bankName,
+                      child: Text("bankName")
+                    )).toList(),
+                    onChanged: (selectedBank)=>setState(()=>_bank=selectedBank),
+                  )
+                  // child: TextField(
+                  //   onChanged: (value)=> _bank = value,
+                  //   maxLines: 1,
+                  //   decoration: InputDecoration(
+                  //       labelText: "Bank Name",
+                  //       border: OutlineInputBorder()
+                  //   ),
+                  // ),
                 ),
               ],
             ),
@@ -187,7 +197,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
       return false;
     }else if(_amount > (widget.budget.getRemsAmount()) || _amount < 1){
       setState(() {
-        _errorMsg = "Invalid amount entered!";
+        _errorMsg = "You are exceeding your remaining balance for this budget";
       });
       return false;
     }else if(_amount > context.read<BalanceBloc>().state){

@@ -199,7 +199,6 @@ class _AddIncomeState extends State<AddIncome> {
     if(_cardNumber.length < 11){
       return setErrorMsg("Please provide a valid credit card number");
     }else if(_cardExpiryDate[2] != '/'){
-      print(_cardExpiryDate);
       return setErrorMsg("Please provide a valid expiry date on your card");
     }else if(_cardOwnerName.length < 4){
       return setErrorMsg("Please provide a valid name associated with the credit card");
