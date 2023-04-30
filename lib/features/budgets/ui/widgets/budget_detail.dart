@@ -98,6 +98,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
           Padding(
             padding: const EdgeInsets.only(top:8.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.45,
@@ -111,13 +112,14 @@ class _BudgetDetailState extends State<BudgetDetail> {
                     keyboardType: TextInputType.number,
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.43,
+                Flexible(
+                  // width: MediaQuery.of(context).size.width * 0.40,
                   child: DropdownButton<String>(
                     value: _bank,
+                    hint: Text("Bank Name"),
                     items: _listOfBanks.map((bankName)=>DropdownMenuItem(
                       value: bankName,
-                      child: Text("bankName")
+                      child: Text(bankName)
                     )).toList(),
                     onChanged: (selectedBank)=>setState(()=>_bank=selectedBank),
                   )
